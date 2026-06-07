@@ -1,98 +1,436 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Chat API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A Real-Time Chat API built with NestJS, WebSockets, Redis, Bull Queue, and PostgreSQL. Features JWT authentication, real-time messaging, room management, Redis caching, background email notifications via Bull Queue, and Prisma ORM.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Tech Stack
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Framework** — NestJS
+- **Language** — TypeScript
+- **Database** — PostgreSQL
+- **ORM** — Prisma v6
+- **Real-Time** — WebSockets (Socket.io)
+- **Caching** — Redis (ioredis)
+- **Queue** — Bull Queue
+- **Authentication** — JWT (JSON Web Tokens)
+- **Password Hashing** — bcrypt
+- **Validation** — class-validator, class-transformer
+- **Email** — Nodemailer + @nestjs-modules/mailer
 
-## Project setup
+---
 
-```bash
-$ npm install
+## Features
+
+- User registration and login with JWT authentication
+- Create and join chat rooms
+- Real-time messaging with WebSockets (Socket.io)
+- Redis caching for rooms and messages
+- Background email notifications via Bull Queue when a user receives a message
+- Cache invalidation on new messages and room joins
+- Consistent error handling across all endpoints
+
+---
+
+## Project Structure
+
+```
+chat-api/
+├── src/
+│   ├── auth/
+│   │   ├── dto/
+│   │   │   ├── register.dto.ts
+│   │   │   └── login.dto.ts
+│   │   ├── guards/
+│   │   │   └── jwt.guard.ts
+│   │   ├── strategies/
+│   │   │   └── jwt.strategy.ts
+│   │   ├── decorators/
+│   │   │   └── get-user.decorator.ts
+│   │   ├── auth.controller.ts
+│   │   ├── auth.module.ts
+│   │   └── auth.service.ts
+│   ├── rooms/
+│   │   ├── dto/
+│   │   │   └── create-room.dto.ts
+│   │   ├── rooms.controller.ts
+│   │   ├── rooms.module.ts
+│   │   └── rooms.service.ts
+│   ├── chat/
+│   │   ├── dto/
+│   │   │   └── create-message.dto.ts
+│   │   ├── chat.gateway.ts
+│   │   ├── chat.module.ts
+│   │   └── chat.service.ts
+│   ├── mail/
+│   │   ├── mail.module.ts
+│   │   ├── mail.service.ts
+│   │   └── mail.processor.ts
+│   ├── redis/
+│   │   ├── redis.module.ts
+│   │   └── redis.service.ts
+│   ├── prisma/
+│   │   ├── prisma.module.ts
+│   │   └── prisma.service.ts
+│   ├── app.module.ts
+│   └── main.ts
+├── prisma/
+│   └── schema.prisma
+├── .env.example
+└── package.json
 ```
 
-## Compile and run the project
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js v18 or higher
+- PostgreSQL
+- Redis
+- npm
+- A Gmail account with App Password enabled
+
+### Installation
+
+1. Clone the repository
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/michael-lfc/nest-chat-api.git
+cd nest-chat-api
 ```
 
-## Run tests
+2. Install dependencies
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+3. Set up environment variables
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+cp .env.example .env
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Update `.env` with your values:
 
-## Resources
+```env
+DATABASE_URL="postgresql://postgres:yourpassword@localhost:5432/chat_db"
+JWT_SECRET="yourjwtsecret"
+REDIS_HOST="localhost"
+REDIS_PORT=6379
+MAIL_HOST="smtp.gmail.com"
+MAIL_PORT=587
+MAIL_USER="youremail@gmail.com"
+MAIL_PASS="yourgoogleapppassword"
+MAIL_FROM="youremail@gmail.com"
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+4. Run database migrations
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+npx prisma migrate dev
+```
 
-## Support
+5. Start Redis server
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+redis-server
+```
 
-## Stay in touch
+6. Start the development server
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+npm run start:dev
+```
 
-## License
+The API will be running at `http://localhost:3000`
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `JWT_SECRET` | Secret key for signing JWT tokens |
+| `REDIS_HOST` | Redis server host (localhost for local) |
+| `REDIS_PORT` | Redis server port (default: 6379) |
+| `MAIL_HOST` | SMTP host (smtp.gmail.com for Gmail) |
+| `MAIL_PORT` | SMTP port (587 for Gmail) |
+| `MAIL_USER` | Gmail address used to send emails |
+| `MAIL_PASS` | Google App Password |
+| `MAIL_FROM` | From address shown on emails |
+
+### Generating a Google App Password
+
+1. Go to myaccount.google.com
+2. Click Security
+3. Enable 2-Step Verification
+4. Search App Passwords
+5. Create one for Mail
+6. Copy the 16 character password into MAIL_PASS
+
+---
+
+## API Endpoints
+
+### Auth
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/auth/register` | Register a new user | No |
+| POST | `/api/auth/login` | Login and get JWT token | No |
+
+### Rooms
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/rooms` | Create a new room | Yes |
+| GET | `/api/rooms` | Get all rooms (cached) | Yes |
+| GET | `/api/rooms/:id` | Get a single room | Yes |
+| POST | `/api/rooms/:id/join` | Join a room | Yes |
+| GET | `/api/rooms/:id/messages` | Get room messages (cached) | Yes |
+
+---
+
+## WebSocket Events
+
+Connect to the WebSocket server at:
+
+```
+ws://localhost:3000
+```
+
+### Client → Server Events
+
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `joinRoom` | `{ roomId: number, token: string }` | Join a chat room |
+| `sendMessage` | `{ body: string, roomId: number, token: string }` | Send a message |
+
+### Server → Client Events
+
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `joinedRoom` | `{ message: string, roomId: number }` | Confirms room join |
+| `receiveMessage` | `{ message: string, data: Message }` | New message in room |
+| `error` | `{ message: string }` | Error response |
+
+---
+
+## Request & Response Examples
+
+### Register
+
+**Request**
+```json
+POST /api/auth/register
+{
+  "email": "michael@gmail.com",
+  "password": "password123",
+  "name": "Michael"
+}
+```
+
+**Response**
+```json
+{
+  "message": "Registration successful",
+  "data": {
+    "id": 1,
+    "email": "michael@gmail.com",
+    "name": "Michael"
+  }
+}
+```
+
+---
+
+### Create a Room
+
+**Request**
+```json
+POST /api/rooms
+Authorization: Bearer <token>
+{
+  "name": "general"
+}
+```
+
+**Response**
+```json
+{
+  "message": "Room created successfully",
+  "data": {
+    "id": 1,
+    "name": "general",
+    "createdAt": "2026-06-05T09:00:00.000Z",
+    "updatedAt": "2026-06-05T09:00:00.000Z"
+  }
+}
+```
+
+---
+
+### Get All Rooms (Cached)
+
+**Response**
+```json
+{
+  "message": "Rooms retrieved successfully (cached)",
+  "data": [
+    {
+      "id": 1,
+      "name": "general",
+      "_count": {
+        "users": 3,
+        "messages": 10
+      }
+    }
+  ]
+}
+```
+
+---
+
+### Get Room Messages (Cached)
+
+**Response**
+```json
+{
+  "message": "Messages retrieved successfully (cached)",
+  "data": [
+    {
+      "id": 1,
+      "body": "Hello everyone!",
+      "roomId": 1,
+      "senderId": 1,
+      "sender": {
+        "id": 1,
+        "name": "Michael",
+        "email": "michael@gmail.com"
+      },
+      "createdAt": "2026-06-05T09:00:00.000Z"
+    }
+  ]
+}
+```
+
+---
+
+## Redis Caching Strategy
+
+| Cache Key | TTL | Invalidated When |
+|-----------|-----|-----------------|
+| `rooms:all` | 60 seconds | User joins a room |
+| `messages:room:{id}` | 30 seconds | New message sent in room |
+
+---
+
+## Bull Queue Flow
+
+```
+User sends message
+      ↓
+Message saved to database
+      ↓
+Email job added to Bull Queue (instant)
+      ↓
+Response returned to user immediately
+      ↓ (background)
+MailProcessor picks up job
+      ↓
+Email notification sent to all room members
+```
+
+---
+
+## Authentication
+
+This API uses JWT Bearer token authentication for HTTP routes. After logging in, include the token in the `Authorization` header:
+
+```
+Authorization: Bearer <your_token>
+```
+
+For WebSocket events, include the token in the event payload:
+
+```json
+{
+  "roomId": 1,
+  "token": "your_jwt_token"
+}
+```
+
+Tokens expire after **7 days**.
+
+---
+
+## Error Responses
+
+| Status Code | Meaning |
+|-------------|---------|
+| 400 | Bad Request — validation failed |
+| 401 | Unauthorized — missing or invalid token |
+| 404 | Not Found — resource does not exist |
+| 409 | Conflict — room already exists or already a member |
+| 500 | Internal Server Error |
+
+---
+
+## Database Schema
+
+```prisma
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  name      String
+  messages  Message[]
+  rooms     RoomUser[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Room {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  messages  Message[]
+  users     RoomUser[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model RoomUser {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  room      Room     @relation(fields: [roomId], references: [id])
+  roomId    Int
+  createdAt DateTime @default(now())
+
+  @@unique([userId, roomId])
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  body      String
+  sender    User     @relation(fields: [senderId], references: [id])
+  senderId  Int
+  room      Room     @relation(fields: [roomId], references: [id])
+  roomId    Int
+  createdAt DateTime @default(now())
+}
+```
+
+---
+
+## Author
+
+**Michael** — Backend Developer
+
+- GitHub: [github.com/michael-lfc](https://github.com/michael-lfc)
+- LinkedIn: [linkedin.com/in/michaelagwogie](https://linkedin.com/in/michaelagwogie)
+- Portfolio: [portfolio-eight-tan-97.vercel.app](https://portfolio-eight-tan-97.vercel.app)
