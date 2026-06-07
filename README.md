@@ -17,6 +17,7 @@ A Real-Time Chat API built with NestJS, WebSockets, Redis, Bull Queue, and Postg
 - **Password Hashing** — bcrypt
 - **Validation** — class-validator, class-transformer
 - **Email** — Nodemailer + @nestjs-modules/mailer
+- **Documentation** — Swagger UI
 
 ---
 
@@ -28,6 +29,7 @@ A Real-Time Chat API built with NestJS, WebSockets, Redis, Bull Queue, and Postg
 - Redis caching for rooms and messages
 - Background email notifications via Bull Queue when a user receives a message
 - Cache invalidation on new messages and room joins
+- Auto-generated Swagger API documentation for HTTP endpoints
 - Consistent error handling across all endpoints
 
 ---
@@ -192,6 +194,20 @@ The API will be running at `http://localhost:3000`
 | GET | `/api/rooms/:id` | Get a single room | Yes |
 | POST | `/api/rooms/:id/join` | Join a room | Yes |
 | GET | `/api/rooms/:id/messages` | Get room messages (cached) | Yes |
+
+---
+
+## API Documentation
+
+Once the server is running, visit:
+
+```
+http://localhost:3000/api/docs
+```
+
+Swagger UI provides interactive documentation for all HTTP endpoints. You can test protected routes by clicking the **Authorize** button and pasting your JWT token.
+
+> Note: WebSocket events cannot be documented in Swagger. Use a WebSocket client to test real-time messaging features.
 
 ---
 
