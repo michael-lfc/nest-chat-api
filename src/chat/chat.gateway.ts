@@ -1,17 +1,3 @@
-// import {
-//   WebSocketGateway,
-//   WebSocketServer,
-//   SubscribeMessage,
-//   MessageBody,
-//   ConnectedSocket,
-//   OnGatewayConnection,
-//   OnGatewayDisconnect,
-// } from '@nestjs/websockets';
-// import { Server, Socket } from 'socket.io';
-// import { UseGuards } from '@nestjs/common';
-// import { ChatService } from './chat.service';
-// import { CreateMessageDto } from './dto/create-message.dto';
-// import { WsJwtGuard } from './guards/ws-jwt.guard';
 import {
   WebSocketGateway,
   WebSocketServer,
